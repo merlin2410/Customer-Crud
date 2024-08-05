@@ -1,6 +1,7 @@
 # Customer Management CRUD Application
 ## Project Description
 This is a CRUD (Create, Read, Update, Delete) application for managing customer data. The application includes user authentication using JWT and integrates with a remote API to fetch customer data. The backend is developed using Spring Boot with a MySQL database, while the frontend is built using HTML, CSS, and JavaScript.
+The remote server is also created using Spring Boot and runs on port 8082.
 
 ## Features
 1. **Authentication**
@@ -86,11 +87,11 @@ This is a CRUD (Create, Read, Update, Delete) application for managing customer 
     - **Method:** GET
 
 - **Delete Customer**
-    - **Path:** http://localhost:8080/customer/delete/{customerId}
+    - **Path:** http://localhost:8080/customer/delete/{customerUuid}
     - **Method:** DELETE
 
 - **Sync Customers**
-    - **Path:** http://localhost:8080/customer/delete/sync
+    - **Path:** http://localhost:8080/customer/sync
     - **Method:** POST
 
 ## Frontend Screens
@@ -116,9 +117,9 @@ This is a CRUD (Create, Read, Update, Delete) application for managing customer 
 ### Backend Setup
 1. Clone the repository:
    ```bash
-        git clone https://github.com/merlin2410/Sunbase-Assignment.git
-2. Configure the MySQL database:
-    - Create a new database named **customer_db** (In the code it is 'sunbase').
+        git clone https://github.com/merlin2410/Customer-Crud
+2. Configure the MySQL database for CustomerCrud:
+    - Create a new database named **customer_db** (In the code it is 'customercrud').
 3. Update the **application.properties** file with your MySQL database credentials. For eg.
    
        
@@ -126,11 +127,31 @@ This is a CRUD (Create, Read, Update, Delete) application for managing customer 
            spring.datasource.url=jdbc:mysql://localhost:3306/customer_db?createTableIfNotExists=true
            spring.datasource.username=root
            spring.datasource.password=password
+4. Configure MySQL database for Customer Remote Server:
+    - Create a new database named **customerserver**
+5. Update the **application.properties file with your MySQL database credentials and change the server port (Eg. In code, it is 8082. Default is 8080)
+        spring.application.name=Assignment
+        spring.datasource.url=jdbc:mysql://localhost:3306/customerserver?createTableIfNotExists=true
+        spring.datasource.username=root
+        spring.datasource.password=password
+        server.port = 8082
        
-5. Build and run the Spring Boot application (use Intellij Idea)
-6. Add admin username and password into the database, which will help you for further login.(Note: Admin creation is not possible via frontend. Use Postman)
+6. Build and run both Customer Server and Customer Crud Spring Boot application (use Intellij Idea)
+7. Add admin username and password into the database of Customer Crud, which will help you for further login.(Note: Admin creation is not possible via frontend. Use Postman)
    
    - **Path:** http://localhost:8080/admin/generateToken
+   - **Method:** POST
+   - **Request Body:**
+     
+          ```json
+          {
+              "userName": "admin",
+              "password": "password",
+              "roles": "ROLE_ADMIN"
+          }
+8. Add admin username and password into the database of Customer Server, which will help you for further login.(Use Postman). Update this credentials into the code of Customer Crud for accessing Customer Server (In RemoteApiService file).
+   
+   - **Path:** http://localhost:8082/admin/generateToken
    - **Method:** POST
    - **Request Body:**
      
