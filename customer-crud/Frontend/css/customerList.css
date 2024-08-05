@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700&display=swap');
+
+*{
+    font-family: 'Mulish', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    gap: 3%;
+    background-color: antiquewhite;
+
+    
+}
+.nav-bar{
+    display: flex;
+    align-items: center;
+    background-color: black;
+    color: white;
+    justify-content: space-between;
+    margin: 0;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.customer-list{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 80%;
+    background-color: antiquewhite;
+}
+
+.customer-list table{
+    height: 87%;
+    background-color: aquamarine;
+}
+
+.customer-list table thead{
+    height: 15%;
+    background-color: lightgrey;
+}
+
+.customer-list table tbody{
+    height: 80%;
+    font-size: large;
+    overflow: auto;
+}
+
+.customer-list table tbody td{
+    width: 5%;
+    height: 10px;
+   
+}
+
+.customer-list table thead th{
+    width: 5%;
+    height: 5%;
+}
+.customer-list table tbody tr{
+    width: 5%;
+    height: 10px;
+    background-color: lightgreen;
+    
+}
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+    height: 5%;
+}
+
+.page-size{
+    width: 7%;
+}
+
+.size{
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+    font-size: large;
+}
+
+.previous{
+    background-color: blueviolet;
+    border-radius: 5px;
+    width: 9%;
+}
+
+.previous button{
+    height: 100%;
+    border: none;
+    width: 100%;
+    background-color: blueviolet;
+    color: white;
+    border-radius: 9px;
+    font-size: large;
+    
+}
+
+.previous button:hover{
+    cursor: pointer;
+}
+
+.next{
+    background-color: blueviolet;
+    border-radius: 5px;
+    width: 9%;
+    text-align: center;
+    font-size: large;
+    
+}
+
+.next button{
+    height: 100%;
+    border: none;
+    width: 100%;
+    background-color: blueviolet;
+    color: white;
+    text-align: center;
+    border-radius: 9px;
+    font-size: large;
+}
+
+.next button:hover{
+    cursor: pointer;
+}
+
+.add-search-sync{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 5%;
+    
+
+}
+
+.add-search-sync button{
+    border-radius: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+}
+
+.add-search-sync button:hover{
+    cursor: pointer;
+}
+
+.search-searchby{
+    display: flex;
+    align-items: center;
+    width: 60%;
+    gap: 1%;
+    height: 100%;
+    
+}
+.searchBy{
+    height: 100%;
+    width: 20%;
+}
+
+.search-searchby select{
+    font-size: large;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.search-searchby select:hover{
+    cursor: pointer;
+}
+
+.search{
+    display: flex;
+    border: 1px solid #cccccc;
+    border-radius: 20px;
+    width: 80%;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    
+}
+
+.search-field-container{
+    width: 90%;
+    padding: 0px 5px;
+    height: 100%;
+    font-size: larger;
+}
+
+.search-field-container input{
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    font-size: large;
+    border-radius: 20px;
+    background-color: transparent;
+
+}
+
+.search-icon{
+    width: 5%;
+    padding: 0px 18px;
+    border-left: 1px solid #d3d3d3;
+}
+
+.search-icon:hover{
+    cursor: pointer;
+}
+
+.add{
+    height: 100%;
+    width: 15%;
+}
+
+.add button{
+    font-size: large;
+    height: 100%;
+    width: 100%;
+}
+
+.add button:hover{
+    cursor: pointer;
+}
+
+.sync{
+    height: 100%;
+    width: 8%;
+}
+
+.sync button{
+    font-size: large;
+    height: 100%;
+    width: 100%;
+}
+
+.sync button:hover{
+    cursor: pointer;
+}
+
+.logout:hover{
+    cursor: pointer;
+}
+
+.heading:hover{
+    cursor: pointer;
+}
