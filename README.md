@@ -70,21 +70,6 @@ The remote server is also created using Spring Boot and runs on port 8082.
     - **Path:** http://localhost:8080/customer/get/{customerId}
     - **Method:** GET
 
- - **Get Customer by First Name**
-    - **Path:** http://localhost:8080/customer/getByFirstName/{firstName}
-    - **Method:** GET
-
-- **Get Customer by City**
-    - **Path:** http://localhost:8080/customer/getByCity/{city}
-    - **Method:** GET
-
-- **Get Customer by Email**
-    - **Path:** http://localhost:8080/customer/getByEmail/{email}
-    - **Method:** GET
-
-- **Get Customer by Phone**
-    - **Path:** http://localhost:8080/customer/getByPhone/{phone}
-    - **Method:** GET
 
 - **Delete Customer**
     - **Path:** http://localhost:8080/customer/delete/{customerUuid}
@@ -93,6 +78,14 @@ The remote server is also created using Spring Boot and runs on port 8082.
 - **Sync Customers**
     - **Path:** http://localhost:8080/customer/sync
     - **Method:** POST
+
+- **Get all Customers with Pagination and Sort**
+    - **Path:** http://localhost:8080/customer/allWithPagination/{offset}/{pageSize}/{field}
+    - **Method:** GET
+
+- **Search Customers by a keyword on all fields**
+    - **Path:** http://localhost:8080/customer/search/{offset}/{pageSize}/{keyword}
+    - **Method:** GET
 
 ## Frontend Screens
 1. **Login Screen:** Logn Screen for Admin.

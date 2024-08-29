@@ -92,38 +92,15 @@ public class CustomerController {
     }
 
 
-    //Api to get a list of customers with the given first name
-    @GetMapping("/getByFirstName/{firstName}")
+    // Search api
+    @GetMapping("/search/{offset}/{pageSize}/{keyword}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity getCustomerByFirstName(@PathVariable("firstName") String firstName){
-        List<Customer> customerList = customerService.getCustomerByFirstName(firstName);
-        return new ResponseEntity<>(customerList,HttpStatus.ACCEPTED);
-    }
+    public ResponseEntity<Page<Customer>> searchCustomer(@PathVariable("offset") int offset,
+                                                         @PathVariable("pageSize") int pageSize,
+                                                         @PathVariable("keyword") String keyword){
 
-
-    //Api to get list of customers based on give city
-    @GetMapping("/getByCity/{city}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity getCustomerByCity(@PathVariable("city") String city){
-        List<Customer> customerList = customerService.getCustomerByCity(city);
-        return new ResponseEntity<>(customerList,HttpStatus.ACCEPTED);
-    }
-
-    //Api to get customer by email
-    @GetMapping("/getByEmail/{email}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity getCustomerByEmail(@PathVariable("email") String email){
-        List<Customer> customerList = customerService.getCustomerByCity(email);
-        return new ResponseEntity<>(customerList,HttpStatus.ACCEPTED);
-    }
-
-
-    //Api to get customer by phone number
-    @GetMapping("/getByPhone/{phone}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity getCustomerByPhone(@PathVariable("phone") String phone){
-        List<Customer> customerList = customerService.getCustomerByPhone(phone);
-        return new ResponseEntity<>(customerList,HttpStatus.ACCEPTED);
+        Page<Customer> customerList = customerService.searchCustomer(offset,pageSize,keyword);
+        return new ResponseEntity<>(customerList,HttpStatus.OK);
     }
 
 
@@ -137,9 +114,6 @@ public class CustomerController {
         logger.debug("Completed Syncing");
         return new ResponseEntity<>("Customers Synchronised successfully",HttpStatus.OK);
     }
-
-
-
 
 }
 

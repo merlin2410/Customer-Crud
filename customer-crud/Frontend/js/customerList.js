@@ -16,6 +16,8 @@ const cityHeading = document.getElementById('cityHeading');
 const stateHeading = document.getElementById('stateHeading');
 const emailHeading = document.getElementById('emailHeading');
 const phoneHeading = document.getElementById('phoneHeading');
+const homeButton = document.getElementById('home');
+let isSearching  = false;
 let currentPageNumber = 0;
 let field = "id";
 let pageSize = 5;
@@ -28,11 +30,21 @@ firstNameHeading.addEventListener('click',(event)=>{
 })
     */
 
+//Clicking home will get all list
+homeButton.addEventListener('click',(event)=>{
+    event.preventDefault();
+    currentPageNumber = 0;
+    field = "id";
+    pageSize = 5;
+    isSearching = false;
+    getCustomerList();
+})
+
 //On click to sort based on last name
 lastNameHeading.addEventListener('click',(event)=>{
     event.preventDefault();
     field = "last_name";
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field);
+    getCustomerList();
 })
 
 
@@ -40,35 +52,35 @@ lastNameHeading.addEventListener('click',(event)=>{
 addressHeading.addEventListener('click',(event)=>{
     event.preventDefault();
     field = "address";
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field);
+    getCustomerList();
 })
 
 //On click to sort based on city
 cityHeading.addEventListener('click',(event)=>{
     event.preventDefault();
     field = "city";
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field);
+    getCustomerList();
 })
 
 //On click to sort based on state
 stateHeading.addEventListener('click',(event)=>{
     event.preventDefault();
     field = "state";
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field);
+    getCustomerList();
 })
 
 //On click to sort based on email
 emailHeading.addEventListener('click',(event)=>{
     event.preventDefault();
     field = "email";
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field);
+    getCustomerList();
 })
 
 //On click to sort based on phone
 phoneHeading.addEventListener('click',(event)=>{
     event.preventDefault();
     field = "phone";
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field);
+    getCustomerList();
 })
 
 //Logout button logic will be triggered here
@@ -82,29 +94,37 @@ logoutButton.addEventListener('click',(event)=>{
 nextButton.addEventListener('click',(event)=>{
     event.preventDefault();
 
+    searchTerm = searchField.value;
     //Increment current page number to keep track
     currentPageNumber++;
     console.log("Current Page Number Inside next: ",currentPageNumber);
-    pageSize = pageSizeField.value;
+    
     console.log(pageSizeField.value);
-    previousButton.style.backgroundColor = 'blueviolet';
-
     //Calls the function to do the logic
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field); 
 
+    if(isSearching==true){
+        searchCustomer(searchTerm);
+    }
+    else{
+        getCustomerList(); 
+    }
+    
 })
 
 //Previous button on click
 previousButton.addEventListener('click',(event)=>{
     event.preventDefault();
     currentPageNumber--;
-    if(currentPageNumber<0){
-        currentPageNumber = 0;
-    }
+    searchTerm = searchField.value;
     console.log("Current Page Number Inside previous: ",currentPageNumber);
-    pageSize = pageSizeField.value;
-    nextButton.style.backgroundColor = 'blueviolet';
-    getCustomerListWithPaginationAndSort(pageSize,currentPageNumber,field);
+    
+    
+    if(isSearching==true){
+        searchCustomer(searchTerm);
+    }
+    else{
+        getCustomerList(); 
+    }
 })
 
 //Add button on click
@@ -120,10 +140,13 @@ addButton.addEventListener('click',(event)=>{
 searchButton.addEventListener('click',(event)=>{
     event.preventDefault();
     searchTerm = searchField.value;
-    searchType = searchTypeField.value;
+    
+    isSearching = true;
+    currentPageNumber = 0;
+    pageSize = pageSizeField.value;
 
     //Runs api for searching customer based on search term and type
-    searchCustomer(searchType,searchTerm);
+    searchCustomer(searchTerm);
 
 
 })
@@ -135,25 +158,48 @@ syncButton.addEventListener('click',(event)=>{
 })
 
 
-//Search custome function. Takes search type and search term as arguements
-function searchCustomer(searchType,searchTerm){
+//Search customer function. 
+async function searchCustomer(searchTerm){
 
-    //Based on the search type different fucntions are triggered
+    console.log("Inside search",currentPageNumber,pageSize,field);
 
-    // if(searchType==="first_name"){
-    //     getCustomerListByFirstName(searchTerm);
-    // }
-    if(searchType==="city"){
-        getCustomerListByCity(searchTerm);
-    }
-    else if(searchType==="email"){
-        getCustomerListByEmail(searchTerm);
-    }
-    else if(searchType==="phone"){
-        getCustomerListByPhone(searchTerm);
-    }
-    else{
-        alert("Select correct search type");
+    try{
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://localhost:8080/customer/search/${currentPageNumber}/${pageSize}/${searchTerm}`,{
+            headers: {
+                'Authorization':`Bearer ${token}`
+            }
+        }
+        );
+
+        console.log(response);
+        console.log(response.ok);
+        if(!response.ok){
+            window.location.href = 'index.html';
+        }
+        let customerData = await response.json();
+
+        console.log(customerData);
+        if(currentPageNumber<customerData.totalPages){
+            nextButton.style.visibility = 'visible';
+            if(currentPageNumber==0){
+                previousButton.style.visibility = 'hidden';
+            }
+            else{
+                previousButton.style.visibility = 'visible';
+            }
+            if(currentPageNumber==customerData.totalPages-1){
+                nextButton.style.visibility = 'hidden';
+            }
+            customerList = customerData.content;
+            render(customerList);
+        }
+        else{
+            nextButton.style.visibility = 'hidden';
+        }
+        console.log(customerData.content);
+    }catch(error){
+        console.error('Error:',error);
     }
     
 }
@@ -242,162 +288,9 @@ async function syncCustomerData() {
 
 
 
-//Gets customer list by first name and populates the table
-async function getCustomerListByFirstName(searchTerm){
-    try{
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/customer/getByFirstName/${searchTerm}`,{
-            headers: {
-                'Authorization':`Bearer ${token}`
-            }
-        }
-        );
-
-        console.log("Inside pagination fucntion",response);
-        console.log("Inside pagination fucntion",response.ok);
-        if(!response.ok){
-            window.location.href = 'index.html';
-        }
-        let customerList = await response.json();
-         
-        //Populating the table with customer data
-        render(customerList);   
-        
-    }catch(error){
-        console.error('Error:',error);
-    }
-}
-
-
-
-//Gets customer list by email and populates the table
-async function getCustomerListByEmail(searchTerm){
-    try{
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/customer/getByEmail/${searchTerm}`,{
-            headers: {
-                'Authorization':`Bearer ${token}`
-            }
-        }
-        );
-
-        console.log("Inside pagination fucntion",response);
-        console.log("Inside pagination fucntion",response.ok);
-        if(!response.ok){
-            window.location.href = 'index.html';
-        }
-        let customerList = await response.json();
-    
-        //Populating table with customer data        
-        render(customerList);
-        
-        
-    }catch(error){
-        console.error('Error:',error);
-    }
-}
-
-
-//Gets customer list by city and populates the table
-async function getCustomerListByCity(searchTerm){
-    try{
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/customer/getByCity/${searchTerm}`,{
-            headers: {
-                'Authorization':`Bearer ${token}`
-            }
-        }
-        );
-
-        console.log("Inside pagination fucntion",response);
-        console.log("Inside pagination fucntion",response.ok);
-        if(!response.ok){
-            window.location.href = 'index.html';
-        }
-        let customerList = await response.json(); 
-        console.log(customerList);
-
-        //Populates table 
-        render(customerList);
-        
-        
-    }catch(error){
-        console.error('Error:',error);
-    }
-}
-
-//Gets customer list by phone number and populates the table
-async function getCustomerListByPhone(searchTerm){
-    try{
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/customer/getByPhone/${searchTerm}`,{
-            headers: {
-                'Authorization':`Bearer ${token}`
-            }
-        }
-        );
-
-        console.log("Inside pagination fucntion",response);
-        console.log("Inside pagination fucntion",response.ok);
-        if(!response.ok){
-            window.location.href = 'index.html';
-        }
-        let customerList = await response.json();  
-        
-        //Populating table
-        render(customerList);
-        
-        
-    }catch(error){
-        console.error('Error:',error);
-    }
-}
-
-
-
-//Gets customer list by first name and populates the table
-async function getCustomerListWithPaginationAndSort(pageSize,pageNumber,field){
-    try{
-        const token = localStorage.getItem('authToken');
-        console.log("Inside get pagination",token);
-        const response = await fetch(`http://localhost:8080/customer/allWithPagination/${pageNumber}/${pageSize}/${field}`,{
-            headers: {
-                'Authorization':`Bearer ${token}`
-            }
-        }
-        );
-
-        console.log("Inside pagination fucntion",response);
-        console.log("Inside pagination fucntion",response.ok);
-        if(!response.ok){
-            window.location.href = 'index.html';
-        }
-        let customerData = await response.json();
-        
-        console.log("Customer Data: ",customerData);
-
-
-        if(customerData.last){
-            currentPageNumber = customerList.totalPages-1;
-            nextButton.style.backgroundColor = 'lightgrey';
-            nextButton.style.display = 'none';
-        }
-        if(customerData.first){
-            currentPageNumber = 0;
-            previousButton.style.backgroundColor = 'lightgrey';
-        }
-        
-            customerList = customerData.content;
-            render(customerList);
-        
-        console.log(customerData.content);
-    }catch(error){
-        console.error('Error:',error);
-    }
-}
-
-
 async function getCustomerList(){
+    console.log("Inside get list",currentPageNumber,pageSize,field);
+    
     try{
         const token = localStorage.getItem('authToken');
         console.log("Inside get list",token);
@@ -409,7 +302,7 @@ async function getCustomerList(){
         );
 
         console.log(response);
-        console.log(response.ok);
+        console.log("customerlist",response.ok);
         if(!response.ok){
             window.location.href = 'index.html';
         }
@@ -417,11 +310,21 @@ async function getCustomerList(){
 
         console.log(customerData);
         if(currentPageNumber<customerData.totalPages){
+            nextButton.style.visibility = 'visible';
+            if(currentPageNumber==0){
+                previousButton.visibility = 'hidden';
+            }
+            else{
+                previousButton.visibility = 'visible';
+            }
+            if(currentPageNumber==customerData.totalPages-1){
+                nextButton.style.visibility = 'hidden';
+            }
             customerList = customerData.content;
             render(customerList);
         }
         else{
-            nextButton.style.backgroundColor = 'lightgrey';
+            nextButton.style.visibility = 'hidden';
         }
         console.log(customerData.content);
     }catch(error){

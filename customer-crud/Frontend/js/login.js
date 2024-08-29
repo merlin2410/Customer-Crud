@@ -68,6 +68,7 @@ async function checkTokenAndRedirect(){
             }
            );
            //If response is there, redirects to Customer list page
+           console.log("check and redirect",response.ok);
            if(response.ok){
             window.location.href = 'customerList.html';
            }

@@ -57,7 +57,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception{
         return http.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->
-                        auth.requestMatchers("/admin/add","/admin/generateToken").permitAll())
+                        auth.requestMatchers("/admin/add","/admin/generateToken","/test","/index").permitAll())
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers("/customer/**").authenticated())
                 .sessionManagement(sess->

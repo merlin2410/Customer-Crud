@@ -39,7 +39,6 @@ public class AdminController {
 
     //Api to generate token, which is to be used by other apis
     @PostMapping("/generateToken")
-
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUserName(),authRequest.getPassword()));

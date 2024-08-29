@@ -26,6 +26,11 @@
     margin: 0;
     padding-left: 1%;
     padding-right: 1%;
+    height: 10%;
+}
+
+.home:hover{
+    cursor: pointer;
 }
 
 .customer-list{
@@ -38,12 +43,14 @@
 
 .customer-list table{
     height: 87%;
-    background-color: aquamarine;
+    background-color:rgb(221, 191, 195);
 }
 
 .customer-list table thead{
     height: 15%;
-    background-color: lightgrey;
+    background-color: navy;
+    color: white;
+    font-size: large;
 }
 
 .customer-list table tbody{
@@ -65,7 +72,7 @@
 .customer-list table tbody tr{
     width: 5%;
     height: 10px;
-    background-color: lightgreen;
+    background-color: white;
     
 }
 
@@ -97,7 +104,7 @@
     height: 100%;
     border: none;
     width: 100%;
-    background-color: blueviolet;
+    background-color: black;
     color: white;
     border-radius: 9px;
     font-size: large;
@@ -121,7 +128,7 @@
     height: 100%;
     border: none;
     width: 100%;
-    background-color: blueviolet;
+    background-color: black;
     color: white;
     text-align: center;
     border-radius: 9px;
@@ -143,13 +150,15 @@
 
 .add-search-sync button{
     border-radius: 10px;
-    background-color: blue;
+    background-color: black;
     color: white;
     border: none;
+    
 }
 
 .add-search-sync button:hover{
     cursor: pointer;
+    background-color: rgb(27, 27, 27);
 }
 
 .search-searchby{

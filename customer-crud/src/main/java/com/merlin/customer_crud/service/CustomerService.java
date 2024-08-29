@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -72,23 +73,11 @@ public class CustomerService {
         return customerList;
     }
 
-    public List<Customer> getCustomerByFirstName(String firstName){
-        return customerRepository.findByFirst_name(firstName);
-    }
-
-    //Get customer list by city
-    public List<Customer> getCustomerByCity(String city){
-        return customerRepository.findByCity(city);
-    }
-
-    //Get customer list by email
-    public List<Customer> getCustomerByEmail(String email){
-        return customerRepository.findByEmail(email);
-    }
-
-    //Get customer list by phone
-    public List<Customer> getCustomerByPhone(String phone){
-        return customerRepository.findByPhone(phone);
+    // To search customer based on the given keyword
+    public Page<Customer> searchCustomer(int offset, int pageSize, String keyword) {
+        Pageable pageable = PageRequest.of(offset,pageSize);
+        Page<Customer> customerList = customerRepository.searchCustomer(keyword,pageable).orElse(null);
+        return customerList;
     }
 
     //Synchronising the customers obtained from remote server to database.
@@ -120,4 +109,6 @@ public class CustomerService {
             }
         }
     }
+
+
 }
